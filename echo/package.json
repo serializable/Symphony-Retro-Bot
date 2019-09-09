@@ -4,12 +4,17 @@
   "description": "Sample Symphony Bot",
   "main": "index.js",
   "scripts": {
+    "build": "node build.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "dotenv": "^8.1.0",
     "symphony-api-client-node": "^1.0.4"
+  },
+  "devDependencies": {
+    "mustache": "^3.0.3"
   }
 }

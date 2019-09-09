@@ -12,6 +12,22 @@ This will start the echo bot
 ```sh
 $ cd echo
 $ npm i
+```
+
+Then setup a new .env file with the following properties:
+
+```sh
+BOT_PATH=./rsa/
+BOT_NAME=
+BOT_PASSWORD=
+BOT_PRIVATE_KEY_PATH=./rsa/
+BOT_PRIVATE_KEY_NAME=
+BOT_USERNAME=
+BOT_EMAIL_ADDRESS=
+```
+
+```js
+$ npm build
 $ npm start
 ```
 

@@ -1,0 +1,17 @@
+{
+  "name": "sentiment-analysis",
+  "version": "1.0.0",
+  "description": "Sentiment Analysis",
+  "main": "index.js",
+  "scripts": {
+    "start:sentiment": "node use-sentiment.js",
+    "start:natural": "node use-natural.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "natural": "^0.6.3",
+    "sentiment": "^5.0.2"
+  }
+}

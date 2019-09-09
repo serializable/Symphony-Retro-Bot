@@ -3,17 +3,16 @@ Symphony Innovate 2019 Hackathon
 
 ## install and run
 
-Add `/rsa/` directory inside `/echo/`.
+1. Add `/rsa/` directory inside `/echo/`.
 The .pem files live inside the `rsa` dir
 
-Replace password token `<add_password_here>` in the `/echo/config.json` file
-
-This will start the echo bot
+2. Install Dependencies
 ```sh
 $ cd echo
 $ npm i
 ```
 
+3. Configure
 Then setup a new .env file with the following properties:
 
 ```sh
@@ -26,6 +25,7 @@ BOT_USERNAME=
 BOT_EMAIL_ADDRESS=
 ```
 
+4. Start
 ```js
 $ npm start
 ```

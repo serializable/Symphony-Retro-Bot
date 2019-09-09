@@ -14,10 +14,9 @@ const data =  {
     botEmailAddress: process.env.BOT_EMAIL_ADDRESS
 }
 
-console.log(data);
-
 const rendered = Mustache.render(template, data);
 
-console.log(rendered);
 fs.writeFileSync('./config.json', rendered, 'utf8');
+
+console.log('Build Successful!')
 

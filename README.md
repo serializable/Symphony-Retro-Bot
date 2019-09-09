@@ -27,7 +27,6 @@ BOT_EMAIL_ADDRESS=
 ```
 
 ```js
-$ npm build
 $ npm start
 ```
 

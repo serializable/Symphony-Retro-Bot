@@ -4,7 +4,7 @@ Symphony.setDebugMode(true)
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
     console.log('message', message);
-    let reply_message = 'Hello ' + message.user.firstName + ', hope you are doing well!!'
+    let reply_message = 'Hello ' + message.user.firstName + ', you said, "' + message.messageText + '"';
     Symphony.sendMessage(message.stream.streamId, reply_message, null, Symphony.MESSAGEML_FORMAT)
   })
 }

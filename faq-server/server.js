@@ -13,9 +13,9 @@ router.get('/answer', async (ctx) => {
 
   result = await nlp.askQuestion(question)
   console.log(result)
-  if(result.answer == "NA") {
+  /*if(result.answer == "NA") {
       ctx.throw(404)
-  }
+  }*/
   ctx.body = result;
 });
 

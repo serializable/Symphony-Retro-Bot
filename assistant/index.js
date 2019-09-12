@@ -36,6 +36,7 @@ const getAnswer = (question, callback) => {
       if (answer === "NA") {
         currentKey = msg.key;
         console.log("Awaiting answer from admin...", currentKey);
+        return;
       }
       callback(msg.answer);
   });

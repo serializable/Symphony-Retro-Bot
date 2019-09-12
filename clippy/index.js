@@ -31,7 +31,7 @@ const getAnswer = (question, callback) => {
                 return;
             }
             let response = JSON.parse(body);
-            if (resonse.answer === "NA") {
+            if (response.answer === "NA") {
               const chat = faqChatMap[response.key];
               const hashtag = chat && chat.chatName;
               if (hashTag) {

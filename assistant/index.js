@@ -26,6 +26,7 @@ const sendMessage = streamId => message => Symphony.sendMessage(streamId, messag
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
   if (admins.includes(message.user.userId)) {
+    console.log("Got admin message")
    // TODO
   }
   else {

@@ -48,7 +48,7 @@ const handleCommand = message => {
   const [command, ...rest] = message.messageText.split(' ');
   switch (command) {
     case '/publish':
-      publish(message.stream.streamId);
+      publish(message);
       return;
     default:
       sendMessage(message.stream.streamId)("Sorry, I don't recognise that command");
@@ -56,11 +56,31 @@ const handleCommand = message => {
   }
 }
 
-const publish = streamId => {
-  sendMessage(streamId)('would publish')
+const publish = message => {
+  const url = `${baseUrl}/publish`;
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    payload: JSON.stringify({
+      chatId: message.stream.streamId
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '')
+    })
+  };
+
+  fetchUrl(
+    url,
+    options,
+    (error, meta, body) => console.log('publish status:', meta.status)
+  )
+  sendMessage(message.stream.streamId)('would publish')
 }
 
-const sendMessage = streamId => messageText => Symphony.sendMessage(streamId, messageText, null, Symphony.MESSAGEML_FORMAT)
+const sendMessage =
+  streamId =>
+    messageText =>
+      Symphony.sendMessage(streamId, messageText, null, Symphony.MESSAGEML_FORMAT)
 
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {

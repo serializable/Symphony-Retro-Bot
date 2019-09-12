@@ -8,34 +8,23 @@ const router = new Router();
 
 app.use(bodyParser());
 
-let data = {
-  'What is your name?': 'FAQ Bot!'
-};
-
 router.get('/answer', async (ctx) => {
   const { question } = ctx.request.query;
 
-  if (!data[question]) {
-    result = await nlp.askQuestion(question)
-    console.log(result)
-    if(result == "NA") {
-        ctx.throw(404)
-    }
-    ctx.body = { question, answer: result };
-    return;
+  result = await nlp.askQuestion(question)
+  console.log(result)
+  if(result == "NA") {
+      ctx.throw(404)
   }
-
-  ctx.body = { question, answer: data[question] };
+  ctx.body = { question, answer: result };
 });
 
 router.post('/save', (ctx) => {
   const { question, answer } = ctx.request.body;
 
-  data[question] = answer;
+  // TODO train NLP
 
-  console.log(data);
-
-  ctx.body = { message: 'saved!' }
+  ctx.body = { message: 'trained!' }
 });
 
 app

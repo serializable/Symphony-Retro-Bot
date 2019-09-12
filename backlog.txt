@@ -10,6 +10,10 @@ match questions to topics without answers
 
 
 
+Presentation:
+- slides
+- demo video
+- script for presentors
 
 Demo:
 - bot replying to similar questions on a channel

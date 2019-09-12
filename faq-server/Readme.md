@@ -8,7 +8,7 @@
 3. Java
 4. React
 
-### Product teams/support
+### Product teams/app support
 1. Portfolio management
 2. Attribution
 3. CRM

@@ -14,5 +14,9 @@
   "product.portfolio-management.benchmark-ret": {
     "questions": [ "Yesterday's GlobalAgg returns are missing", "my exposure to GlobalAgg seems off", "Are yesterday's GlobalAgg returns correct?"],
     "answer": "There is a known issue with the returns for this benchmark, we are chasing the vendor and we'll let you know when the data is available."
+  },
+  "product.attribution.performance": {
+    "questions": [ "What was my high yield fund's relative performance in August", "how do I find out if I am outperforming the benchmark"],
+    "answer": null
   }
 }

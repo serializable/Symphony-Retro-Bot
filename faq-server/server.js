@@ -13,10 +13,10 @@ router.get('/answer', async (ctx) => {
 
   result = await nlp.askQuestion(question)
   console.log(result)
-  if(result == "NA") {
+  if(result.answer == "NA") {
       ctx.throw(404)
   }
-  ctx.body = { question, answer: result };
+  ctx.body = result;
 });
 
 router.post('/save', async (ctx) => {

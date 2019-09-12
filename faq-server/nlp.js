@@ -8,11 +8,10 @@ trainNlp.initTrain(nlpManager);
 
 async function askQuestion(question) {
   const result = await nlpManager.process(question);
-  const answer =
-    result.score > threshold && result.answer
+  const answer = result.score > threshold && result.answer
       ? result.answer
       : "NA";
-  return (`${answer}`);
+  return { key: result.intent, question, answer: answer };
 }
 
 async function train(key, question, answer) {

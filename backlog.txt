@@ -1,0 +1,16 @@
+stories:
+
+assistant
+command to publish to trello
+integrate
+
+clippy
+match questions and give answers
+match questions to topics without answers
+
+
+
+
+Demo:
+- bot replying to similar questions on a channel
+- publish to trello and review product

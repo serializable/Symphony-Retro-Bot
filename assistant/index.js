@@ -9,6 +9,11 @@ const admins = [
   349026222348203 // Chris B
 ];
 
+const encodeId = id => id
+  .replace(/\+/g, '-')
+  .replace(/\//g, '_')
+  .replace(/=+$/, '')
+
 let currentQuestion = null;
 
 const getAnswer = (question, callback) => {
@@ -50,6 +55,9 @@ const handleCommand = message => {
     case '/publish':
       publish(message);
       return;
+    case '/chatId':
+      chatId(message);
+      return;
     default:
       sendMessage(message.stream.streamId)("Sorry, I don't recognise that command");
       return;
@@ -62,10 +70,7 @@ const publish = message => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     payload: JSON.stringify({
-      chatId: message.stream.streamId
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '')
+      chatId: encodeId(message.stream.streamId)
     })
   };
 
@@ -74,7 +79,12 @@ const publish = message => {
     options,
     (error, meta, body) => console.log('publish status:', meta.status)
   )
-  sendMessage(message.stream.streamId)('would publish')
+  sendMessage(message.stream.streamId)('would publish');
+}
+
+const chatId = message => {
+  const streamId = message.stream.streamId;
+  sendMessage(streamId)(encodeId(streamId));
 }
 
 const sendMessage =

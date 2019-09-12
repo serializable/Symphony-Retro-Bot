@@ -8,7 +8,7 @@
     "answer": "Please go to File > Settings and set your HTTP proxy to hostname http://myproxy.com and port 1234"
   },
   "product.portfolio-management.login": {
-    "questions": [ "How do I login to the PMS application", "PMS tells me I am unauthenticated", "PMS doesn't recognise mu email address"],
+    "questions": [ "How do I login to the PMS application", "PMS tells me I am unauthenticated", "PMS doesn't recognise my email address"],
     "answer": "Please log in with your domain username and password"
   },
   "product.portfolio-management.benchmark-ret": {

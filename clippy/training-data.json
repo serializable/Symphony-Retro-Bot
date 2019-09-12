@@ -1,6 +1,18 @@
 {
-  "key": {
-    "questions": [ "question one?", "question two?"],
-    "answer": "my answer"
+  "jetbrains.license": {
+    "questions": [ "How do I license my IntelliJ", "What is the JetBrains license server", "my pyCharm is unregistered"],
+    "answer": "Please go to Help > Register and use the http://myjetbrains.floating.license.server.com address for your license server"
+  },
+  "jetbrains.proxy": {
+    "questions": [ "What is the intellij proxy", "how can I configure the proxy server", "I can't install an intelliJ plugin"],
+    "answer": "Please go to File > Settings and set your HTTP proxy to hostname http://myproxy.com and port 1234"
+  },
+  "portfolio-management.login": {
+    "questions": [ "How do I login to the PMS application", "PMS tells me I am unauthenticated", "PMS doesn't recognise mu email address"],
+    "answer": "Please log in with your domain username and password"
+  },
+  "portfolio-management.benchmark-ret": {
+    "questions": [ "Yesterday's GlobalAgg returns are missing", "my exposure to GlobalAgg seems off", "Are yesterday's GlobalAgg returns correct?"],
+    "answer": "There is a known issue with the returns for this benchmark, we are chasing the vendor and we'll let you know when the data is available."
   }
 }

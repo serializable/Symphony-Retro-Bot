@@ -14,7 +14,9 @@ let data = {
 router.get('/answer', (ctx) => {
   const { question } = ctx.request.query;
 
-  console.log(data);
+  if (!data[question]) {
+    ctx.throw(404);
+  }
 
   ctx.body = { question, answer: data[question] };
 });

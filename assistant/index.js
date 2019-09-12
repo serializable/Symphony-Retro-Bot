@@ -57,7 +57,7 @@ const saveAnswer = (question, answer) => {
   fetchUrl(
     url,
     options,
-    (error, meta, body) => console.log('save status:', meta.status)
+    (error, meta, body) => {}
   )
 }
 
@@ -67,6 +67,7 @@ const handleCommand = message => {
   const [command, ...rest] = message.messageText.split(' ');
   switch (command) {
     case '/publish':
+     console.log('\n\n\nwill publish')
       publish(message);
       return;
     case '/chatId':
@@ -91,9 +92,15 @@ const publish = message => {
   fetchUrl(
     url,
     options,
-    (error, meta, body) => console.log('publish status:', meta.status)
+    (error, meta, body) => {
+      if (meta.status === 500) {
+        sendMessage(message.stream.streamId)('Failed to publish');
+      } else {
+        sendMessage(message.stream.streamId)('Published to ' + JSON.parse(body).boardUrl);
+      }
+    }
   )
-  sendMessage(message.stream.streamId)('would publish');
+
 }
 
 const chatId = message => {

@@ -14,5 +14,9 @@
   "product.portfolio-management.benchmark-ret": {
     "chatId": "yr3L8EZ0RWGwmzrx2rCDp3___pLalMh9dA",
     "chatName": "Portfolio_management"
+  },
+  "product.attribution.performance": {
+    "chatId": "ZIH0VypH0E8LkNi6KxTmmn___pLalEU2dA",
+    "chatName": "Attribution"
   }
 }

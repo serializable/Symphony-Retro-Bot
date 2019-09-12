@@ -31,9 +31,7 @@ router.get('/answer', async (ctx) => {
 router.post('/save', (ctx) => {
   const { question, answer } = ctx.request.body;
 
-  if (!data[question]) {
-    data[question] = answer;
-  }
+  data[question] = answer;
 
   console.log(data);
 

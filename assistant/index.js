@@ -6,7 +6,7 @@ Symphony.setDebugMode(true);
 const baseUrl = 'http://localhost:3000';
 
 const admins = [
- 349026222348203 // Chris B
+  349026222348203 // Chris B
 ];
 
 let currentQuestion = null;
@@ -42,10 +42,33 @@ const saveAnswer = (question, answer) => {
   )
 }
 
-const sendMessage = streamId => message => Symphony.sendMessage(streamId, message, null, Symphony.MESSAGEML_FORMAT)
+const isCommand = messageText => messageText.startsWith('/')
+
+const handleCommand = message => {
+  const [command, ...rest] = message.messageText.split(' ');
+  switch (command) {
+    case '/publish':
+      publish(message.stream.streamId);
+      return;
+    default:
+      sendMessage(message.stream.streamId)("Sorry, I don't recognise that command");
+      return;
+  }
+}
+
+const publish = streamId => {
+  sendMessage(streamId)('would publish')
+}
+
+const sendMessage = streamId => messageText => Symphony.sendMessage(streamId, messageText, null, Symphony.MESSAGEML_FORMAT)
 
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
+  if (isCommand(message.messageText)) {
+    handleCommand(message);
+    return;
+  }
+
   if (admins.includes(message.user.userId)) {
     console.log("Got admin message")
     saveAnswer(currentQuestion, message.messageText);

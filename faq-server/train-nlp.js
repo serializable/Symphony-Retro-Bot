@@ -22,7 +22,7 @@ async function initTrain(manager) {
   // Adding answers
   for (var i = 0; i < keys.length; i++ ){
     if(data[keys[i]]['answer'] != ""){
-        manager.addAnswer('en',  keys[i], )
+        manager.addAnswer('en',  keys[i], data[keys[i]]['answer'])
     }
   }
   manager.save('./model.nlp', true);

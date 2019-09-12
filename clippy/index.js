@@ -1,6 +1,8 @@
 const Symphony = require('symphony-api-client-node');
 const {fetchUrl} = require('fetch');
 
+const faqChatMap = require('../faq-chat-map.json');
+
 Symphony.setDebugMode(true);
 
 const baseUrl = 'http://localhost:3000';
@@ -30,7 +32,14 @@ const getAnswer = (question, callback) => {
             }
             let response = JSON.parse(body);
             if (resonse.answer === null) {
-              callback("I don't know the answer, but try asking this in the room #" + response.key);
+              const chat = faqChatMap[response.key];
+              const hashtag = chat && chat.chatName;
+              if (hashTag) {
+                callback("I don't know the answer, but try asking this in the room #" + hashtag);
+              }
+              else {
+                callback("I don't know the answer");
+              }
             }
             else
               callback(response.answer);

@@ -1,4 +1,5 @@
 const fs = require('fs');
+const data = require('./training-data.json')
 
 module.exports = async function trainnlp(manager) {
   if (fs.existsSync('./model.nlp')) {
@@ -6,11 +7,15 @@ module.exports = async function trainnlp(manager) {
     return;
   }
 
+  const keys = Object.keys( data )
+
   // Adding Document
-  manager.addDocument('en', 'How do I install Intellij?', 'jetbrains.install');
-  manager.addDocument('en', 'How do I set up jetbrains license?', 'jetbrains.license.help');
-  manager.addDocument('en', 'JetProfile connection error: SSLHandshakeException: java.security.cert.CertificateException: java.security.SignatureException: Signature length not correct: got 256 but was expecting 512', 'jetbrains.license.error');
-  manager.addDocument('en', 'java.security.cert.CertificateException: java.security.SignatureException: Signature does not match.', 'jetbrains.license.error');
+  for (var i = 0; i < keys.length; i++ ){
+    const questions = data[keys[i]]['questions']
+    for(var j = 0; j < questions.length; j++) {
+        manager.addDocument('en', questions[j], keys[i]);
+    }
+  }
 
   console.log('Training, please wait..');
   const hrstart = process.hrtime();
@@ -20,8 +25,9 @@ module.exports = async function trainnlp(manager) {
   console.log('Trained!');
 
   // Adding answers
-  manager.addAnswer('en', 'jetbrains.install', "Please follow the instructions here: https://www.jetbrains.com/help/idea/installation-guide.html");
-  manager.addAnswer('en', 'jetbrains.license.error', "Please follow the instructions here: " + "https://intellij-support.jetbrains.com/hc/en-us/articles/206544889-SignatureException-Signature-doesn-t-match-or-Signature-length-not-correct-got-256-but-was-expecting-512");
+  for (var i = 0; i < keys.length; i++ ){
+     manager.addAnswer('en',  keys[i], data[keys[i]]['answer'])
+  }
 
   manager.save('./model.nlp', true);
 }

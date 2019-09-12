@@ -12,6 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.1.0",
+    "fetch": "^1.1.0",
+    "isomorphic-fetch": "^2.2.1",
     "symphony-api-client-node": "^1.0.4"
   },
   "devDependencies": {

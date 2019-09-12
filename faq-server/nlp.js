@@ -1,10 +1,10 @@
 const { NlpManager } = require('node-nlp');
-const trainnlp = require('./train-nlp');
+const trainNlp = require('./train-nlp');
 
 const threshold = 0.5;
 const nlpManager = new NlpManager({ languages: ['en'] });
 
-trainnlp(nlpManager);
+trainNlp.initTrain(nlpManager);
 
 async function askQuestion(question) {
   const result = await nlpManager.process(question);
@@ -12,15 +12,15 @@ async function askQuestion(question) {
     result.score > threshold && result.answer
       ? result.answer
       : "NA";
-  let sentiment = '';
-  if (result.sentiment.score !== 0) {
-    sentiment = `  ${result.sentiment.score > 0 ? ':)' : ':('}   (${
-      result.sentiment.score
-    })`;
-  }
-  return (`${answer}${sentiment}`);
+  return (`${answer}`);
+}
+
+async function train(key, question, answer) {
+    await trainNlp.reTrain(nlpManager, key, question, answer)
+    return;
 }
 
 module.exports = {
-    askQuestion
+    askQuestion,
+    train
 }

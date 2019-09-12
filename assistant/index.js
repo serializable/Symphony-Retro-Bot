@@ -57,6 +57,7 @@ const handleCommand = message => {
       return;
     case '/chatId':
       chatId(message);
+      return;
     default:
       sendMessage(message.stream.streamId)("Sorry, I don't recognise that command");
       return;

@@ -19,10 +19,10 @@ router.get('/answer', async (ctx) => {
   ctx.body = { question, answer: result };
 });
 
-router.post('/save', (ctx) => {
-  const { question, answer } = ctx.request.body;
+router.post('/save', async (ctx) => {
+  const { key, question, answer } = ctx.request.body;
 
-  // TODO train NLP
+  await nlp.train(key, question, answer)
 
   ctx.body = { message: 'trained!' }
 });

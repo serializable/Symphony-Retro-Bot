@@ -29,15 +29,16 @@ const sendMessage = streamId => message => Symphony.sendMessage(streamId, messag
 
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
-    if (admins.includes(message.user.userId)) {
-      // TODO
-    }
-    else {
-      currentQuestion = message.messageText;
-      console.log("Message from user:", message.messageText);
-      sendAnswer(currentQuestion, sendMessage(message.stream.streamId));
-    }
-  })
+  if (admins.includes(message.user.userId)) {
+    console.log("Got admin message")
+   // TODO
+  }
+  else {
+     currentQuestion = message.messageText;
+     console.log("Message from user:", message.messageText);
+     sendAnswer(currentQuestion, sendMessage(message.stream.streamId));
+  }
+ })
 }
 
 Symphony.initBot(__dirname + '/config.json')

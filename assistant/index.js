@@ -16,6 +16,7 @@ const encodeId = id => id
   .replace(/=+$/, '')
 
 let currentQuestion = null;
+let currentKey = null;
 
 const getAnswer = (question, callback) => {
   const url = `${baseUrl}/answer?question=${encodeURIComponent(question)}`;
@@ -30,11 +31,17 @@ const getAnswer = (question, callback) => {
           // should train the model here
          return;
       }
+      const body = JSON.parse(body);
+      const answer = body.answer;
+      if (answer === "NA") {
+        currentKey = body.key;
+        console.log("Awaiting answer from admin...", currentKey);
+      }
       callback(JSON.parse(body).answer);
   });
 }
 
-const saveAnswer = (question, answer, key) => {
+const saveAnswer = (question, answer) => {
   const url = `${baseUrl}/save`;
   const options = {
     method: 'POST',
@@ -42,7 +49,7 @@ const saveAnswer = (question, answer, key) => {
     payload: JSON.stringify({
       question,
       answer,
-      key
+      key: currentKey
     })
   };
 
@@ -98,12 +105,6 @@ const sendMessage =
     messageText =>
       Symphony.sendMessage(streamId, messageText, null, Symphony.MESSAGEML_FORMAT)
 
-const getKey = streamId => {
-  const topics = Object.entries(faqChatMap);
-  const matchingTopic = topics.find(([k, chat]) => chat.chatId === streamId)
-  return matchingTopic && matchingTopic[0];
-}
-
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
   if (isCommand(message.messageText)) {
@@ -113,7 +114,7 @@ const botHearsSomething = (event, messages) => {
 
   if (admins.includes(message.user.userId)) {
     console.log("Got admin message")
-    saveAnswer(currentQuestion, message.messageText, encodeId(message.stream.streamId));
+    saveAnswer(currentQuestion, message.messageText);
   }
   else {
      currentQuestion = message.messageText;

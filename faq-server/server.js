@@ -4,6 +4,8 @@ const bodyParser = require('koa-bodyparser');
 const fs = require('fs');
 const nlp = require('./nlp');
 
+const faqChatMap = require('../faq-chat-map.json');
+
 const { archiveList, createCard, getBoardUrl } = require('./trello');
 
 const app = new Koa();
@@ -48,7 +50,7 @@ router.post('/publish', async (ctx) => {
 
   // console.log(list);
 
-  // await archiveList(chatId);
+  await archiveList(chatId);
 
   // cards.forEach(async card => {
   //   await createCard(card);

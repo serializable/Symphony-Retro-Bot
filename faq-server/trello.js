@@ -2,21 +2,23 @@
 const fetch = require('node-fetch');
 
 const boards = {
-    'tech': '5d7a2bf2941b8728b268161b',
-    'product-teams-support': '5d7a2c006f6095517737e1b0',
-    'investment-staff-rooms': '5d7a2c0ed6dd76786b74b3f0',
-};
-
-const lists = {
-    tech: {
-
+    'tech': {
+        id: '5d7a2bf2941b8728b268161b',
+        lists: {
+            'jetbrains': {
+                name: 'Jet Brains'
+            }
+        }
     },
-    product: {
-
-    },
-    staff: {
-
+    'product': {
+        id: '5d7a2c006f6095517737e1b0',
+        lists: {
+            'portfolio-management': {
+                name: 'Portfolio Management'
+            }
+        }
     }
+    // 'investment': '5d7a2c0ed6dd76786b74b3f0',
 };
 
 const key = 'baa5d62ea0e25cc45901033d82f4bf65';
@@ -27,10 +29,51 @@ const query = {
     token
 };
 
-const archiveList = async (listId) => {
+const archiveList = async (listKey) => {
+
+    const boardId = Object.entries(boards).find(([key, value]) => {
+        const found = Object.keys(value.lists).find(k => listKey === listKey);
+        if (found) {
+            return found.id;
+        }
+    });
+
+    const listResponse = await fetch({
+        method: 'GET',
+        url: `https://api.trello.com/1/boards/${boardId}/lists${qs.stringify({ cards: 'none', ...query })}`
+    });
+
+    const listBody = await listResponse.json();
+
+    console.log(listBody);
+
+
     const response = await fetch({
         method: 'POST',
         url: `https://api.trello.com/1/lists/${listId}/archiveAllCards${qs.stringify(query)}`
+    });
+
+    const body = await response.json();
+
+    return body;
+}
+
+const createList = async (list) => {
+
+    // list:
+    // {
+    //     name: '',
+    //     idBoard: ''
+    // }
+
+    const queryString = {
+        ...query,
+        ...list
+    };
+
+    const response = await fetch({
+        method: 'POST',
+        url: `https://api.trello.com/1/lists${qs.stringify(queryString)}`
     });
 
     const body = await response.json();

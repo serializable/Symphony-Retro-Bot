@@ -54,6 +54,8 @@ const archiveList = async (boardKey, listKey) => {
     if (!response.ok) {
         console.error(response)
     }
+
+    return foundList.id;
 }
 
 const createList = async (boardKey, listKey) => {

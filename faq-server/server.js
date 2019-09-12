@@ -80,9 +80,11 @@ router.post('/publish', async (ctx) => {
 
   const l = Object.entries(mergedData).filter(([key, value]) => key.startsWith(`${board}.${list}`));
 
-  await archiveList(board, list);
+  let listId = await archiveList(board, list);
 
-  const listId = await createList(board, list);
+  if (!listId) {
+     listId = await createList(board, list);
+  }
 
   const cards = l.map(([key, value]) => {
     return {

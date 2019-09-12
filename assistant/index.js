@@ -1,5 +1,6 @@
 const Symphony = require('symphony-api-client-node');
 const {fetchUrl} = require('fetch');
+const faqChatMap = require('../faq-chat-map.json');
 
 Symphony.setDebugMode(true);
 
@@ -15,9 +16,10 @@ const encodeId = id => id
   .replace(/=+$/, '')
 
 let currentQuestion = null;
+let currentKey = null;
 
 const getAnswer = (question, callback) => {
-  const url = `${baseUrl}/answer?question=${question}`;
+  const url = `${baseUrl}/answer?question=${encodeURIComponent(question)}`;
   fetchUrl(
     url,
     (error, meta, body) => {
@@ -29,7 +31,14 @@ const getAnswer = (question, callback) => {
           // should train the model here
          return;
       }
-      callback(JSON.parse(body).answer);
+      const msg = JSON.parse(body);
+      const answer = msg.answer;
+      if (answer === "NA") {
+        currentKey = msg.key;
+        console.log("Awaiting answer from admin...", currentKey);
+        return;
+      }
+      callback(msg.answer);
   });
 }
 
@@ -38,7 +47,11 @@ const saveAnswer = (question, answer) => {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    payload: JSON.stringify({ question, answer })
+    payload: JSON.stringify({
+      question,
+      answer,
+      key: currentKey
+    })
   };
 
   fetchUrl(

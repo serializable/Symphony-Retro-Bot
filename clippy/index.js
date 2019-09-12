@@ -27,11 +27,11 @@ const getAnswer = (question, callback) => {
             console.log('meta', meta);
             console.log('body', body);
             if (meta.status === 404) {
-                callback('Someone will get back to you soon');
+                callback("Sorry, I can't help with this question");
                 return;
             }
             let response = JSON.parse(body);
-            if (resonse.answer === "NA") {
+            if (response.answer === "NA") {
               const chat = faqChatMap[response.key];
               const hashtag = chat && chat.chatName;
               if (hashTag) {

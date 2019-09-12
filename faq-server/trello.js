@@ -1,4 +1,4 @@
-
+const qs = require('qs');
 const fetch = require('node-fetch');
 
 const boards = {
@@ -29,36 +29,34 @@ const query = {
     token
 };
 
-const archiveList = async (listKey) => {
+const archiveList = async (boardKey, listKey) => {
 
-    const boardId = Object.entries(boards).find(([key, value]) => {
-        const found = Object.keys(value.lists).find(k => listKey === listKey);
-        if (found) {
-            return found.id;
-        }
-    });
+    const boardId = boards[boardKey].id;
 
-    const listResponse = await fetch({
-        method: 'GET',
-        url: `https://api.trello.com/1/boards/${boardId}/lists${qs.stringify({ cards: 'none', ...query })}`
-    });
+    const listResponse = await fetch(`https://api.trello.com/1/boards/${boardId}/lists?${qs.stringify({ filter: 'open', cards: 'none', ...query })}`);
+
+    if (!listResponse.ok) {
+        console.error(listResponse);
+    }
 
     const listBody = await listResponse.json();
 
-    console.log(listBody);
+    if (listBody.length === 0) {
+        return;
+    }
 
+    const foundList = listBody.find(l => l.name === boards[boardKey].lists[listKey].name);
 
-    const response = await fetch({
-        method: 'POST',
-        url: `https://api.trello.com/1/lists/${listId}/archiveAllCards${qs.stringify(query)}`
+    const response = await fetch(`https://api.trello.com/1/lists/${foundList.id}/archiveAllCards?${qs.stringify(query)}`, {
+        method: 'POST'
     });
 
-    const body = await response.json();
-
-    return body;
+    if (!response.ok) {
+        console.error(response)
+    }
 }
 
-const createList = async (list) => {
+const createList = async (boardKey, listKey) => {
 
     // list:
     // {
@@ -66,19 +64,25 @@ const createList = async (list) => {
     //     idBoard: ''
     // }
 
+    const name = boards[boardKey].lists[listKey].name;
+    const idBoard = boards[boardKey].id;
     const queryString = {
         ...query,
-        ...list
+        name,
+        idBoard
     };
 
-    const response = await fetch({
-        method: 'POST',
-        url: `https://api.trello.com/1/lists${qs.stringify(queryString)}`
+    const response = await fetch(`https://api.trello.com/1/lists?${qs.stringify(queryString)}`, {
+        method: 'POST'
     });
+
+    if (!response.ok) {
+        console.error(response);
+    }
 
     const body = await response.json();
 
-    return body;
+    return body.id;
 }
 
 const createCard = async (listId, card) => {
@@ -96,29 +100,32 @@ const createCard = async (listId, card) => {
         ...card
     };
 
-    const response = await fetch({
-        method: 'POST',
-        url: `https://api.trello.com/1/cards${qs.stringify(queryString)}`
+    const response = await fetch(`https://api.trello.com/1/cards?${qs.stringify(queryString)}`, {
+        method: 'POST'
     });
 
-    const body = await response.json();
-
-    return body;
+    if (!response.ok) {
+        console.error(response);
+    }
 };
 
-const getBoardUrl = async (boardsSlug) => {
-    const response = await fetch({
-        method: 'POST',
-        url: `https://api.trello.com/1/boards/${boards[boardsSlug]}${qs.stringify(query)}`
-    });
+const getBoardUrl = async (boardKey) => {
 
-    const body = await reponse.json();
+    const url = `https://api.trello.com/1/boards/${boards[boardKey].id}?${qs.stringify(query)}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        console.error(response);
+    }
+
+    const body = await response.json();
 
     return body.url;
 }
 
 module.exports = {
     archiveList,
+    createList,
     createCard,
     getBoardUrl,
 

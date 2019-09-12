@@ -6,7 +6,7 @@ const nlp = require('./nlp');
 
 const faqChatMap = require('../faq-chat-map.json');
 
-const { archiveList, createCard, getBoardUrl } = require('./trello');
+const { archiveList, createList, createCard, getBoardUrl } = require('./trello');
 
 const app = new Koa();
 const router = new Router();
@@ -24,41 +24,80 @@ router.get('/answer', async (ctx) => {
   ctx.body = result;
 });
 
+const saveAddedData = (key, question, answer) => {
+  if (!fs.existsSync('./added-data.json')) {
+    const addedData = {
+      [key]: {
+        questions: [question],
+        answer
+      }
+    }
+
+    fs.writeFileSync('./added-data.json', JSON.stringify(addedData));
+  }
+
+  const addedData = JSON.parse(fs.readFileSync('./added-data.json', 'utf8'));
+  addedData[key].questions.push(question);
+  fs.writeFileSync('./added-data.json', JSON.stringify(addedData));
+}
+
 router.post('/save', async (ctx) => {
   const { key, question, answer } = ctx.request.body;
 
   await nlp.train(key, question, answer)
 
+  saveAddedData(key, question, answer);
+
   ctx.body = { message: 'trained!' }
 });
+
+const capitalize = (val) => {
+    return val.charAt(0).toUpperCase() + val.slice(1);
+}
 
 router.post('/publish', async (ctx) => {
   const { chatId } = ctx.request.body;
 
-  if (!fs.existsSync('./model.nlp')) {
-    ctx.throw(500, 'model should be trained first!');
-  }
-  const model = JSON.parse(fs.readFileSync('./model.nlp', 'utf8'));
+  const [ key ] = Object.entries(faqChatMap).find(([key, value]) => value.chatId === chatId);
 
-  console.log(JSON.stringify(model));
+  const [ board, list, _ ] = key.split('.');
 
-  //const { responses: { en = {} } } = model;
-  const { nluManager: { domainManagers: { en = {} }, extraSentences } } = model;
+  const hasAddedData = fs.existsSync('./addedData.json');
 
+  const addedData = hasAddedData ? JSON.parse(fs.readFileSync('./addedData.json', 'utf8')) : {};
+  const originalData = require('./training-data.json');
 
-  // const list = en[chatId];
+  const mergedData = Object.keys(addedData).reduce((acc, key) => {
+    const added = addedData[key];
 
-  // console.log(list);
+    if(acc[key]) {
+      acc[key].questions = [ ...acc[key].questions, ...added[key].questions ];
+      acc[key].answer = acc[key].answer || added[key].answer;
+    }
 
-  await archiveList(chatId);
+    return acc;
+  }, originalData);
 
-  // cards.forEach(async card => {
-  //   await createCard(card);
-  // });
+  const l = Object.entries(mergedData).filter(([key, value]) => key.startsWith(`${board}.${list}`));
 
-  // const boardUrl = await getBoardUrl(chatId);
+  await archiveList(board, list);
 
-  // ctx.body = { boardUrl };
+  const listId = await createList(board, list);
+
+  const cards = l.map(([key, value]) => {
+    return {
+      name: capitalize(key.split('.')[2]),
+      desc: `Answer: ${value.answer}\n\nQuestions: ${value.questions.join('\n\n')}`
+    };
+  });
+
+  cards.forEach(async card => {
+    await createCard(listId, card);
+  });
+
+  const boardUrl = await getBoardUrl(board);
+
+  ctx.body = { boardUrl };
 });
 
 app

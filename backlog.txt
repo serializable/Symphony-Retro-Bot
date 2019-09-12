@@ -13,8 +13,9 @@ match questions to topics without answers
 Presentation:
 - slides
 - demo video
-- script for presentors
+- script for presenters
 
 Demo:
 - bot replying to similar questions on a channel
 - publish to trello and review product
+- clippy sends answers fuzzy question and sends user to relevant room

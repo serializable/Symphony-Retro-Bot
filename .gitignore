@@ -1,6 +1,7 @@
 
 rsa
 node_modules
+model.nlp
 
 config.json
 .env

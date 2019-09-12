@@ -29,7 +29,7 @@ const getAnswer = (question, callback) => {
                 return;
             }
             let response = JSON.parse(body);
-            if (!resonse.answer) {
+            if (resonse.answer === null) {
               callback("I don't know the answer, but try asking this in the room #" + response.key);
             }
             else

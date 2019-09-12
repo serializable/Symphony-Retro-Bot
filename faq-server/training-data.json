@@ -1,7 +1,7 @@
 {
   "tech.jetbrains.license": {
     "questions": [ "How do I license my IntelliJ", "What is the JetBrains license server", "my pyCharm is unregistered"],
-    "answer": "Please go to Help > Register and use the http://myjetbrains.floating.license.server.com address for your license server"
+    "answer": ""
   },
   "tech.jetbrains.proxy": {
     "questions": [ "What is the intellij proxy", "how can I configure the proxy server", "I can't install an intelliJ plugin"],

@@ -21,8 +21,8 @@ const boards = {
     // 'investment': '5d7a2c0ed6dd76786b74b3f0',
 };
 
-const key = 'baa5d62ea0e25cc45901033d82f4bf65';
-const token = 'e9575fc6d20bb13d64266bab9288d11dad7f7a15a20fe61798239dbe3627a518';
+const key = '';
+const token = '';
 
 const query = {
     key,

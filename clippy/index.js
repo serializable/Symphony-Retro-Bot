@@ -33,9 +33,9 @@ const getAnswer = (question, callback) => {
             let response = JSON.parse(body);
             if (response.answer === "NA") {
               const chat = faqChatMap[response.key];
-              const hashtag = chat && chat.chatName;
+              const hashTag = chat && chat.chatName;
               if (hashTag) {
-                callback("I don't know the answer, but try asking this in the room #" + hashtag);
+                callback("I don't know the answer, but try asking this in the <hash tag=\"" + hashTag + "\">" + hashTag + "</hash> chat room ");
               }
               else {
                 callback("I don't know the answer");

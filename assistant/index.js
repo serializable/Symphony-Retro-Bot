@@ -57,7 +57,7 @@ const saveAnswer = (question, answer) => {
   fetchUrl(
     url,
     options,
-    (error, meta, body) => console.log('save status:', meta.status)
+    (error, meta, body) => {}
   )
 }
 

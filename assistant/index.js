@@ -9,8 +9,10 @@ const admins = [
  349026222348203 // Chris B
 ];
 
-const sendAnswer = (question, callback) => {
-  const url = `${baseUrl}/answer`;
+let currentQuestion = null;
+
+const getAnswer = (question, callback) => {
+  const url = `${baseUrl}/answer?question=${question}`;
   fetchUrl(
     url,
     (error, meta, body) => {
@@ -21,8 +23,23 @@ const sendAnswer = (question, callback) => {
          callback('Someone will get back to you soon');
          return;
       }
-      callback(body.toString());
+      callback(JSON.parse(body).answer);
   });
+}
+
+const saveAnswer = (question, answer) => {
+  const url = `${baseUrl}/save`;
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    payload: JSON.stringify({ question, answer })
+  };
+
+  fetchUrl(
+    url,
+    options,
+    (error, meta, body) => console.log('save status:', meta.status)
+  )
 }
 
 const sendMessage = streamId => message => Symphony.sendMessage(streamId, message, null, Symphony.MESSAGEML_FORMAT)
@@ -31,12 +48,12 @@ const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
   if (admins.includes(message.user.userId)) {
     console.log("Got admin message")
-   // TODO
+    saveAnswer(currentQuestion, message.messageText);
   }
   else {
      currentQuestion = message.messageText;
      console.log("Message from user:", message.messageText);
-     sendAnswer(currentQuestion, sendMessage(message.stream.streamId));
+     getAnswer(currentQuestion, sendMessage(message.stream.streamId));
   }
  })
 }

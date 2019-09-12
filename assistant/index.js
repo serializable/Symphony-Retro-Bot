@@ -31,13 +31,13 @@ const getAnswer = (question, callback) => {
           // should train the model here
          return;
       }
-      const body = JSON.parse(body);
-      const answer = body.answer;
+      const msg = JSON.parse(body);
+      const answer = msg.answer;
       if (answer === "NA") {
-        currentKey = body.key;
+        currentKey = msg.key;
         console.log("Awaiting answer from admin...", currentKey);
       }
-      callback(JSON.parse(body).answer);
+      callback(msg.answer);
   });
 }
 

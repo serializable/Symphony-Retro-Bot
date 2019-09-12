@@ -1,5 +1,6 @@
 const Symphony = require('symphony-api-client-node');
 const {fetchUrl} = require('fetch');
+const faqChatMap = require('../faq-chat-map.json');
 
 Symphony.setDebugMode(true);
 
@@ -17,7 +18,7 @@ const encodeId = id => id
 let currentQuestion = null;
 
 const getAnswer = (question, callback) => {
-  const url = `${baseUrl}/answer?question=${question}`;
+  const url = `${baseUrl}/answer?question=${encodeURIComponent(question)}`;
   fetchUrl(
     url,
     (error, meta, body) => {
@@ -33,12 +34,16 @@ const getAnswer = (question, callback) => {
   });
 }
 
-const saveAnswer = (question, answer) => {
+const saveAnswer = (question, answer, key) => {
   const url = `${baseUrl}/save`;
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    payload: JSON.stringify({ question, answer })
+    payload: JSON.stringify({
+      question,
+      answer,
+      key
+    })
   };
 
   fetchUrl(
@@ -93,6 +98,12 @@ const sendMessage =
     messageText =>
       Symphony.sendMessage(streamId, messageText, null, Symphony.MESSAGEML_FORMAT)
 
+const getKey = streamId => {
+  const topics = Object.entries(faqChatMap);
+  const matchingTopic = topics.find(([k, chat]) => chat.chatId === streamId)
+  return matchingTopic && matchingTopic[0];
+}
+
 const botHearsSomething = (event, messages) => {
   messages.forEach((message, index) => {
   if (isCommand(message.messageText)) {
@@ -102,7 +113,7 @@ const botHearsSomething = (event, messages) => {
 
   if (admins.includes(message.user.userId)) {
     console.log("Got admin message")
-    saveAnswer(currentQuestion, message.messageText);
+    saveAnswer(currentQuestion, message.messageText, encodeId(message.stream.streamId));
   }
   else {
      currentQuestion = message.messageText;

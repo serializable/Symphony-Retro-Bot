@@ -37,12 +37,12 @@ curl "http://localhost:3000/answer?question=Why%20is%20the%20sky%20blue%3F"
 ```
 response (200):
 ```js
-{"question":"Why is the sky blue?","answer":"I dont know"}
+{"key":"life.facts", "question":"Why is the sky blue?","answer":"I dont know"}
 ```
 
 ####Save a question/answer pair:
 ```sh
-curl -d '{"question":"Why is the sky blue?", "answer":"I dont know"}' -H "Content-Type: application/json" -X POST http://localhost:3000/save
+curl -d '{"key":"life.facts", "question":"Why is the sky blue?", "answer":"I dont know"}' -H "Content-Type: application/json" -X POST http://localhost:3000/save
 ```
 response (201):
 ```js

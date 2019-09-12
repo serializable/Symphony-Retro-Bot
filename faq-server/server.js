@@ -16,16 +16,16 @@ router.get('/answer', async (ctx) => {
 
   result = await nlp.askQuestion(question)
   console.log(result)
-  if(result == "NA") {
+  if(result.answer == "NA") {
       ctx.throw(404)
   }
-  ctx.body = { question, answer: result };
+  ctx.body = result;
 });
 
-router.post('/save', (ctx) => {
-  const { question, answer } = ctx.request.body;
+router.post('/save', async (ctx) => {
+  const { key, question, answer } = ctx.request.body;
 
-  // TODO train NLP
+  await nlp.train(key, question, answer)
 
   ctx.body = { message: 'trained!' }
 });
